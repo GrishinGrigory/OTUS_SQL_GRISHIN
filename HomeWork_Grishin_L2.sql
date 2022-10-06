@@ -15,7 +15,7 @@ where StockItemName like '%urgent%'
 SELECT t.[SupplierName]
 	  ,t.SupplierID
       FROM [Purchasing].[PurchaseOrders] f join [Purchasing].[Suppliers] s on f.SupplierID=s.SupplierID
-	                                     right join [Purchasing].[Suppliers] t on f.SupplierID=t.SupplierID
+	                                   right join [Purchasing].[Suppliers] t on f.SupplierID=t.SupplierID
 where PurchaseOrderID is null
 --____________________________________________________________________________________________________
 
@@ -31,12 +31,12 @@ SELECT DISTINCT f.[OrderID]
 	  ,case when MONTH([OrderDate]) between 1 and 4 then 1
 	        when MONTH([OrderDate]) between 5 and 8 then 2
 			else 3
-       end as Triens    
-      ,CustomerName as Customer
+           end as Triens    
+         ,CustomerName as Customer
 FROM [Sales].[Orders]f join [Sales].[Customers] s on f.CustomerID=s.CustomerID 
                        join [Sales].[OrderLines] t on f.OrderID = t.OrderID
 where UnitPrice >100
-    or ( Quantity> 20 and t.[PickingCompletedWhen] is null)
+  or ( Quantity> 20 and t.[PickingCompletedWhen] is null)
 order by Qartal,Triens,date_order
 
 /* вариант с пропуском первых 1000 и выводом следующих 100*/
@@ -47,12 +47,12 @@ SELECT DISTINCT f.[OrderID]
 	  ,case when MONTH([OrderDate]) between 1 and 4 then 1
 	        when MONTH([OrderDate]) between 5 and 8 then 2
 			else 3
-       end as Triens    
-      ,CustomerName as Customer
+           end as Triens    
+         ,CustomerName as Customer
 FROM [Sales].[Orders]f join [Sales].[Customers] s on f.CustomerID=s.CustomerID 
                        join [Sales].[OrderLines] t on f.OrderID = t.OrderID
 where UnitPrice >100
-    or ( Quantity> 20 and t.[PickingCompletedWhen] is null)
+  or ( Quantity> 20 and t.[PickingCompletedWhen] is null)
 order by Qartal,Triens,date_order
 OFFSET 1000 ROWS FETCH NEXT 100 ROWS ONLY
 
@@ -65,8 +65,8 @@ OFFSET 1000 ROWS FETCH NEXT 100 ROWS ONLY
 	  ,case when MONTH([OrderDate]) between 1 and 4 then 1
 	        when MONTH([OrderDate]) between 5 and 8 then 2
 			else 3
-       end as Triens    
-      ,CustomerName as Customer
+           end as Triens    
+         ,CustomerName as Customer
 FROM [Sales].[Orders]f join [Sales].[Customers] s on f.CustomerID=s.CustomerID 
                        join (select iif (q1.OrderID is null,q2.OrderID,q1.OrderID) as OrderID 
                              from (SELECT [OrderID] FROM [Sales].[OrderLines]
@@ -90,7 +90,7 @@ SELECT [DeliveryMethodName]
       ,FullName as  [ContactPerson]
   FROM [Purchasing].[PurchaseOrders] f join [Application].[DeliveryMethods] s on f.DeliveryMethodID=s.DeliveryMethodID
                                        join [Purchasing].[Suppliers] t on f.SupplierID=t.SupplierID
-									   join [Application].[People] q on f.ContactPersonID = q.PersonID
+	                               join [Application].[People] q on f.ContactPersonID = q.PersonID
 where ExpectedDeliveryDate between '2013-01-01' and '2013-01-31'
  and IsOrderFinalized  = 1
  and ([DeliveryMethodName] ='Air Freight' or [DeliveryMethodName] = 'Refrigerated Air Freight')
@@ -114,6 +114,6 @@ SELECT distinct lvl3.[CustomerID]
       ,[PhoneNumber]
   FROM [Sales].[Customers] lvl3 join [Sales].[Invoices] lvl2 on lvl2.CustomerID=lvl3.CustomerID
                                 join [Sales].[InvoiceLines] lvl1 on lvl2.InvoiceID= lvl1.InvoiceID
-								join [Warehouse].[StockItems] s on lvl1.StockItemID= s.StockItemID
+			        join [Warehouse].[StockItems] s on lvl1.StockItemID= s.StockItemID
 where StockItemName like '%Chocolate frogs 250g%'
 --____________________________________________________________________________________________________
